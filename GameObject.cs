@@ -12,9 +12,9 @@ namespace motor
     public abstract class GameObject
     {
         public Vector2 posicion;
-        private Vector2 Posicion {  get => posicion; set => posicion=value; }
-        private int radio;
-        public int Radio {  get => radio; set => radio=value; }
+        public int radio;
+      
+
         
         public GameObject ( Vector2 posicion, int radio)
         {
@@ -24,9 +24,40 @@ namespace motor
            
         }
 
-        public abstract Vector2 update(float deltaTime);
+        public abstract void update();
         public abstract void render();
-       
+        public float MovimientoGOX(float velocidad)
+        {
+            float direccionX = 0;
+
+            if (Raylib.IsKeyDown(KeyboardKey.D))
+            {
+                direccionX = velocidad * Raylib.GetFrameTime();
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.A))
+            {
+                direccionX = -velocidad * Raylib.GetFrameTime();
+            }
+            return direccionX;
+        }
+        public float MovimientoGOY(float velocidad)
+        {
+            float direccionY = 0;
+
+            if (Raylib.IsKeyDown(KeyboardKey.S))
+            {
+                direccionY = velocidad * Raylib.GetFrameTime();
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.W))
+            {
+                direccionY = -velocidad * Raylib.GetFrameTime();
+            }
+            return direccionY;
+        }
+
+        
+
+
 
     }
 }

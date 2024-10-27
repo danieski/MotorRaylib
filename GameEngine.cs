@@ -11,12 +11,8 @@ namespace motor
     {
         List<GameObject> listGameObjets = new List<GameObject>();
 
-        public GameObject personaje = new Personaje(new Vector2(50, 50), 25);
-        
-        const int CIRCLE_SPEED = 50;
-        float deltaTime = Raylib.GetFrameTime();
 
-        /* SINGLETONE ENGINE */
+        /* SINGLETON ENGINE */
 
         private static GameEngine instance;
         public static GameEngine Instance
@@ -39,43 +35,84 @@ namespace motor
 
             Raylib.SetTargetFPS(60);
             Raylib.InitWindow(800, 480, "Cops and Thifs");
-            
-
         }
-        
-        /* UPDATE */
-        public void update(float deltaTime)
+
+        public void run()
         {
-            /*
+            while (!Raylib.WindowShouldClose())
+            {
+
+                update();
+                
+
+
+                /*RENDER*/
+                fisicas();
+                //Raylib.BeginMode2D(camera);
+                render();
+                //Raylib.EndMode2D();
+                //gestionar nuevos objetos u objetos a borrar
+                //Add objeto
+                //delete
+
+            }
+        }
+
+        /* UPDATE */
+        public void update()
+        {
+            float deltaTime = Raylib.GetFrameTime();
             foreach (GameObject objLista in listGameObjets)
             {
-                objLista.posicion = personaje.update(deltaTime);
+                objLista.update();
             }
-            */
-           personaje.posicion = personaje.update(deltaTime);
+            
         }
 
-        
-        public void addGameObject()
-        {
-            listGameObjets.Add(personaje);
-        }
-        public void removeGameObject()
-        {
-
-        }
 
         /* RENDER */
         public void render()
         {
-            /*
-            foreach (Personaje objLista in gameObjects)
+            
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.White);
+            Raylib.DrawText($"FPS: {Raylib.GetFPS()}", 650, 50, 20, Color.Pink);
+
+            foreach (GameObject objLista in listGameObjets)
             {
-                objLista.render(objLista.posicionpersonaje);
+
+                
+                objLista.render();
+
+
             }
-            */
-            personaje.render();
+
+            Raylib.EndDrawing();
         }
-        /* SHUTDOWN */
+
+        public void addGameObject(GameObject gameObject)
+        {
+            listGameObjets.Add(gameObject);
+        }
+        public void removeGameObject(GameObject gameObject)
+        {
+            listGameObjets.Remove(gameObject);
+        }
+        /* FISICAS */
+        public void fisicas()
+        {
+
+            GameObject personaje = listGameObjets[0];
+            GameObject enemigo = listGameObjets[1];
+
+
+                if (Raylib.CheckCollisionCircles(personaje.posicion, personaje.radio, enemigo.posicion, enemigo.radio))
+                {
+                    Raylib.DrawText("Collision Detected", 400, 220, 20, Color.Red);
+                }
+
+        }
+
+
     }
 }

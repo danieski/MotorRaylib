@@ -10,31 +10,33 @@ namespace motor
 {
     public class Personaje : GameObject
     {
+        /* COONFIG */
         public float tiempoAcumulado = 0f;
         private float intervaloCambioColor = 1f; // Cambiará de color cada segundo
         public Color colorActual = Color.Blue;  // Color inicial
+                                                //camera2d
+        
 
-        public Vector2 posicion;
-        //private Vector2 Posicion { get => posicion; set => posicion = value; }
         public Personaje(Vector2 posicion, int radio) : base(posicion, radio)
         {
         }
         /* UPDATE */
-        public override Vector2 update(float deltaTime)
-
+        public override void update()
         {
 
             /* MOVIMIENTO */
 
-            float cambioPosicionY = movimientoPersonajeY(deltaTime);
-            float cambioPosicionX = movimientoPersonajeX(deltaTime);
-            this.posicion.Y += cambioPosicionY;
-            this.posicion.X += cambioPosicionX;
-            
+            //GameEngine.Instance.CamaraPosition(position.X, position.Y)
+            this.posicion.Y += MovimientoGOY(50);
+            this.posicion.X += MovimientoGOX(50);
+
+            /* MOVIMIENTO CAMARA */
+
+            //camera.Target = this.posicion;
 
             /*SIRENAS DE POLI*/
 
-            tiempoAcumulado += deltaTime;
+            tiempoAcumulado += Raylib.GetFrameTime();
             if (tiempoAcumulado >= intervaloCambioColor)
             {
                 if (colorActual.Equals(Color.Blue)) 
@@ -47,55 +49,16 @@ namespace motor
                     }
                 tiempoAcumulado = 0f;
             }
-            
-            return new Vector2(this.posicion.X, this.posicion.Y);
+
         }
+
         /* RENDER */
         public override void render()
         {
-
-            
-            //contadorCaminar++;
-            Raylib.DrawCircleV(this.posicion, 50, colorActual);
-            
-        }
-        /* INPUTS */
-
-        /*INPUTS EJE Y*/
-        public float movimientoPersonajeY(float deltaTime)
-        {
-           
-            float direccionY = 0;
-
-            if (Raylib.IsKeyDown(KeyboardKey.S))
-            {
-                direccionY = 50 * deltaTime;
-            }
-            if (Raylib.IsKeyDown(KeyboardKey.W))
-            {
-                direccionY = -50 * deltaTime;
-            }
-            return direccionY;
-
+            Raylib.DrawCircleV(this.posicion, this.radio, colorActual);
         }
 
-        /*INPUTS EJE X*/
-        public float movimientoPersonajeX(float deltaTime)
-        {
-           
-            float direccionX = 0;
 
-            if (Raylib.IsKeyDown(KeyboardKey.D))
-            {
-                direccionX = 50 * deltaTime;
-            }
-            if (Raylib.IsKeyDown(KeyboardKey.A))
-            {
-                direccionX = -50 * deltaTime;
-            }
-            return direccionX;
-
-
-        }
+        
     }
 }

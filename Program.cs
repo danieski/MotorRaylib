@@ -16,48 +16,26 @@ class Program
         /* INICIAMOS MOTOR*/
         /* CONFIG */
         GameEngine engine = new GameEngine();
+        Camera2D camera = new();
+        
+
+        camera.Target = new Vector2 { X = Raylib.GetScreenWidth() / 2.0f, Y = Raylib.GetScreenHeight() / 2.0f };
+        camera.Offset = new Vector2 { X = Raylib.GetScreenWidth() / 2.0f, Y = Raylib.GetScreenHeight() / 2.0f };
+        camera.Rotation = 0.0f;
+        camera.Zoom = 1.0f;
+
 
         engine.start();
-             
-
-        int contadorCaminar = 0;
+        Personaje personaje = new Personaje(new Vector2 { X = Raylib.GetScreenWidth() / 2, Y = Raylib.GetScreenHeight() / 2 }, 50);
+        engine.addGameObject(personaje);
+        engine.addGameObject(new Enemigo(new Vector2 { X= Raylib.GetRandomValue(100, 700), Y= Raylib.GetRandomValue(100, 400) }, 30));
+       
+       
+        engine.run();
 
         /* GAME LOOP */
 
-        while (!Raylib.WindowShouldClose())
 
-        {
-
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.White);
-            float deltaTime = Raylib.GetFrameTime();
-            Raylib.DrawText($"Deltatime: {deltaTime}", 100, 300, 20, Color.Pink);
-
-
-
-
-
-            /*UPDATE*/
-            engine.addGameObject();
-            engine.update(deltaTime);
-
-            //engine.movimientoPersonaje(deltaTime, direccionX, direccionY);
-            //personaje.Posicion = personaje.update(deltaTime, direccionX, direccionY);
-
-            /*RENDER*/
-            
-            Raylib.DrawText($"Delta time: {deltaTime}", 550, 20, 20, Color.Red);
-
-            engine.render();
-            contadorCaminar++;
-            if (contadorCaminar > 20)
-                contadorCaminar = 0;
-
-
-
-
-            Raylib.EndDrawing();
-        }
 
         Raylib.CloseWindow();
     }
