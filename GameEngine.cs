@@ -101,7 +101,7 @@ namespace motor
         /* FISICAS */
         public void fisicas()
         {
-
+            //recorro toda
             GameObject personaje = listGameObjets[0];
             GameObject enemigo = listGameObjets[1];
 

@@ -55,7 +55,22 @@ namespace motor
             return direccionY;
         }
 
+        public virtual bool comprobarColisionConOtro(GameObject obj)
+        {
+            return false;
+        }
         
+        public virtual bool comprobarColisionConCirculo(Vector2 centro, float radio)
+        {
+            return false;
+        }
+        
+        public virtual bool comprobarColisionConRectangulo(Rectangle rectangulo)
+        {
+            return false;
+        }
+
+
 
 
 

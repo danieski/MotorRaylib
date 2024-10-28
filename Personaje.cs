@@ -57,8 +57,28 @@ namespace motor
         {
             Raylib.DrawCircleV(this.posicion, this.radio, colorActual);
         }
-
-
         
+        public override bool comprobarColisionConOtro(GameObject obj)
+        {
+            //poruque? porque comprueba col con circulo
+            //AH! porque el otro colisionara con circulo
+            
+            return obj.comprobarColisionConCirculo(posicion, radio);
+        }
+        //que de hecho es este 
+        //si estoy colisionando con otro
+        //de este otro (obj) voy a ejecutar su funcion implementada comprobarColisionConCirculo
+        public override bool comprobarColisionConCirculo(Vector2 centro, float radio)
+        {
+            
+            return Raylib.CheckCollisionCircles(this.posicion, this.radio, centro, radio);
+        }
+        //si el otro es un rectangulo el llamara a la funcion comprobarColisionConRectangulo
+        //Poruqe? porque el mismo me va a decir que lo compruebe, el sabe que con lo que estas colisionando es un rectangulo
+        //porque el es un rectangulo
+        public override bool comprobarColisionConRectangulo(Rectangle rectangulo)
+        {
+            return Raylib.CheckCollisionCircleRec(this.posicion, this.radio, rectangulo);
+        }
     }
 }

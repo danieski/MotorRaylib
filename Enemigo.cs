@@ -49,6 +49,36 @@ namespace motor
             }
             return direccionX;
         }*/
+        
+        public override bool comprobarColisionConOtro(GameObject obj)
+        {
+            //comprobar las colisiones con el otro es
+            //llamar a la funcion de colision con rectangulo
+            //porque yo soy rectangulo
+            return obj.comprobarColisionConRectangulo(rectangulo); 
+            
+            
+            /*
+             
+            if(obj is Enemigo)
+                return Raylib.CheckCollisionRecs(this.rectangulo, obj.rectangulo);
+            if(obj is Personaje)
+                return Raylib.CheckCollisionCircleRec(obj.centro, obj.radio, rectangulo);
+        */
+        }
+        //Esta funcion por ejemplo sera llamada por el circulo que colisione con nosotros
+        //introducira su informacion Vector y radio 
+        //Como ya sabemos que somos un rectangulo entonces el circulo que chcoque con nosotros
+        //recibira para que ejeecute una funcion que compruebe colision rectangulo con circulo
+        public override bool comprobarColisionConCirculo(Vector2 centro, float radio)
+        {
+            return Raylib.CheckCollisionCircleRec(centro, radio, rectangulo);
+        }
+        
+        public override bool comprobarColisionConRectangulo(Rectangle rectangulo)
+        {
+            return Raylib.CheckCollisionRecs(this.rectangulo, rectangulo);
+        }
     }
 }
     
