@@ -142,7 +142,7 @@ public class Motoret
 
             //Render sota càmera
             Raylib.BeginMode2D(_Camera);
-                Raylib.ClearBackground(Color.White);
+                Raylib.ClearBackground(Color.Black);
 
                 foreach(IGameObject gameObject in _GameObjects)
                     gameObject.Render();

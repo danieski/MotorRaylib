@@ -73,16 +73,14 @@ public class Alma : IGameObject, IPhysicGameObject
         switch (_currentLifeBar)
         {
             case LifeBar.zero:
-                _ColorCurrent = Color.Pink;
+                _ColorCurrent = Color.Green;
                 break;
             case LifeBar.one:
-                _ColorCurrent = Color.Purple;
+                _ColorCurrent = Color.DarkGreen;
                 break;
             case LifeBar.two:
-                _ColorCurrent = Color.Violet;
                 break;
             case LifeBar.three:
-                _ColorCurrent = Color.DarkPurple;
                 break;
             case LifeBar.four:
                 motoret.Motoret.Instance.RemoveGameObject(this);
