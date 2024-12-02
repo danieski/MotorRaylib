@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fmERJ7KxDdQ=",
+  "dgSpecHash": "XpRZxfK/PLE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ies\\RiderProjects\\MotorRaylib1\\motor.csproj",
+  "projectFilePath": "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\motor.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ies\\.nuget\\packages\\raylib-cs\\6.1.1\\raylib-cs.6.1.1.nupkg.sha512",
     "C:\\Users\\ies\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"

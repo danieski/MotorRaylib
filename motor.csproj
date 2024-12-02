@@ -11,16 +11,4 @@
     <PackageReference Include="Raylib-cs" Version="6.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="assets\alma.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\chonkus.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\mousus.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
