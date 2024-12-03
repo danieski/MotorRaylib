@@ -5,7 +5,7 @@ using Raylib_cs;
 
 namespace exempleClasses;
 
-public class Mousus : IGameObject, IPhysicGameObject
+public class Personaje : IGameObject, IPhysicGameObject
 {
     public Vector2 _Position;
     float _Radius;
@@ -21,10 +21,12 @@ public class Mousus : IGameObject, IPhysicGameObject
     private float _rotation;
     Vector2 _direction;
     private Vector2 _direccion1;
-    //private float tiempoMuestra = 0.25f;
-    //private float tiempoTranscurrido=0;
-    //private List<Vector2> _recorridoDebug;
-    
+    private float _radarAngle = 0f;
+    private float _radarRadius = 300f;
+    private float _radarSpeed = 1f;
+    private int _radarStickX;
+    private int _radarStickY;
+    private Vector2 _radarPosition;
     
 
     enum CharacterStates
@@ -35,7 +37,7 @@ public class Mousus : IGameObject, IPhysicGameObject
     CharacterStates currentState;
     private bool _turboActivated = false;
 
-    public Mousus()
+    public Personaje()
     {
         _Position = new Vector2 {X = Raylib.GetScreenWidth()/2, Y = Raylib.GetScreenHeight()/2 };
 
@@ -43,7 +45,7 @@ public class Mousus : IGameObject, IPhysicGameObject
     }
 
     //XML
-    public Mousus(XmlNode node)
+    public Personaje(XmlNode node)
     {
         _Position.X = float.Parse(node.Attributes["x"].Value);
         _Position.Y = float.Parse(node.Attributes["y"].Value);
@@ -110,13 +112,14 @@ public class Mousus : IGameObject, IPhysicGameObject
         _TextureCurrent = _TextureNoHit;
         
         UpdateState();
-        /*
-        tiempoTranscurrido += deltaTime;
-        if (tiempoTranscurrido > tiempoMuestra)
+        
+        _radarAngle += _radarSpeed * deltaTime;
+        if (_radarAngle > MathF.PI *2)
         {
-            _recorridoDebug.Add(_Position);
-            tiempoTranscurrido -= tiempoMuestra;
-        }*/
+            _radarAngle -= MathF.PI *2;
+        }
+  
+        
     }
 
 
@@ -192,19 +195,20 @@ public class Mousus : IGameObject, IPhysicGameObject
 
         Raylib.DrawTexturePro(_TextureCurrent, _DrawRectangleInfo, _DrawRectangleCurrent, _DrawOffset, _rotation, _Color);
         Raylib.DrawCircleLinesV(_Position, _Radius, Color.Lime);
-    /*Dots Debug
-        foreach (var punto in _recorridoDebug)
-        {
-            Raylib.DrawCircle((int)punto.X, (int)punto.Y, 5, Color.Red);
-        }*/
+        _radarPosition.X = _Position.X+(_radarRadius+100)*(float)MathF.Cos(_radarAngle);
+        _radarPosition.Y = _Position.Y+(_radarRadius+100)*(float)MathF.Sin(_radarAngle);
+        //Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90)));   
+
+        
+        Raylib.DrawLineV(_Position,_radarPosition,Color.Lime);
+       // Raylib.DrawLine((int)_Position.X, (int)_Position.Y, _radarStickX, _radarStickY,Color.DarkGreen);
+        //Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90)));
     }
 
     public void RenderGUI()
     {
         Raylib.DrawText($"Position: ({_Position.X},{_Position.Y})", 12, 12, 20, Color.DarkGreen);
-        //Raylib.DrawText($"Rotation: ({_rotation})", 12, 52, 20, Color.Black);
-        //Raylib.DrawText($"Coseno: ({(float)Math.Cos((Math.PI/180)*_rotation)})", 12, 80, 20, Color.Black);
-        //Raylib.DrawText($"Seno: ({(float)Math.Sin((Math.PI/180)*_rotation)})", 12, 100, 20, Color.Black);
+
         
         if(_TextureCurrent.Equals(_TextureNoHit))
             Raylib.DrawText("No col·lisionant", 12, 36, 20, Color.Black);

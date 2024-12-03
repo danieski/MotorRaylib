@@ -25,7 +25,7 @@ public class ExempleClasses
         {
             //creació dels GameObjects que ens interessen
             //Aquest d'aquí equival a l'antic player
-            IGameObject player = new Mousus();
+            IGameObject player = new Personaje();
             
             motor.AddGameObject(player);
 

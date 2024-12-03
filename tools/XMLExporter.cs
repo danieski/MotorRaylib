@@ -42,7 +42,7 @@ public static class XMLExporter
                 switch(gameObjectNode.Name)
                 {
                     case "mousus":
-                        gameObjects.Add(new Mousus(gameObjectNode));
+                        gameObjects.Add(new Personaje(gameObjectNode));
                         break;
                     case "alma":
                         gameObjects.Add(new Alma(gameObjectNode));
