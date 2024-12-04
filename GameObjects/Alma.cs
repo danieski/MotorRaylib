@@ -15,7 +15,10 @@ public class Alma : IGameObject, IPhysicGameObject
     Rectangle _DrawRectangleInfo;
     private LifeBar _currentLifeBar;
     private Vector2 _RadarPoint;
-    private int contador;
+    private bool _showAlma = false;
+    
+    private float _AlmaTimeMaxShow = 5;
+    private float _AlmaTimeCounter = 0;
 
     enum LifeBar 
     {
@@ -46,8 +49,8 @@ public class Alma : IGameObject, IPhysicGameObject
 
     private void InitValues(Texture2D texture)
     {
-        _Position.Height = 100;
-        _Position.Width = 100;
+        _Position.Height = 10;
+        _Position.Width = 10;
 
         _Texture = texture;
 
@@ -63,8 +66,17 @@ public class Alma : IGameObject, IPhysicGameObject
     public void Start() { }
 
     public void Update()
-    { 
-        //_ColorCurrent = _ColorNoHit;
+    {
+        if (_showAlma)
+        {
+            _AlmaTimeCounter =+ 1 * Raylib.GetFrameTime();
+            if (_AlmaTimeCounter > _AlmaTimeMaxShow)
+            {
+                _AlmaTimeCounter = 0;
+                _showAlma = false;
+            }
+            
+        }
     }
 
     //Al ser textura compartida, no l'alliberem
@@ -72,7 +84,7 @@ public class Alma : IGameObject, IPhysicGameObject
 
     public void Render()
     {
-        Raylib.DrawTexturePro(_Texture, _DrawRectangleInfo, _Position, Vector2.Zero, 0, _ColorCurrent);
+   
         switch (_currentLifeBar)
         {
             case LifeBar.zero:
@@ -88,8 +100,15 @@ public class Alma : IGameObject, IPhysicGameObject
             case LifeBar.four:
                 motoret.Motoret.Instance.RemoveGameObject(this);
                 break;
+            
         }
-        Raylib.DrawRectangleLinesEx(_Position, 5, _ColorCurrent);
+        if (_showAlma)
+        {
+            Raylib.DrawRectangleLinesEx(_Position, 5, _ColorCurrent);
+            _showAlma = false;
+        }
+
+        
     }
 
     public void RenderGUI() { }
@@ -106,10 +125,9 @@ public class Alma : IGameObject, IPhysicGameObject
 
         if (other is Personaje)
         {
-            _currentLifeBar += 1;
-            Console.WriteLine("Choco desde alma (Personaje)");
+            _showAlma = true;
         }
-        Console.WriteLine("Choco desde alma" + other + contador++);
+        Console.WriteLine("Choco desde alma" + other );
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
@@ -139,6 +157,6 @@ public class Alma : IGameObject, IPhysicGameObject
 
     public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
     {
-        return Raylib.CheckCollisionPointLine(_RadarPoint, lineStart, lineEnd, 100);
+        return Raylib.CheckCollisionPointLine(_Position.Position, lineStart, lineEnd, 10);
     }
 }

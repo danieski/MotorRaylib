@@ -221,13 +221,12 @@ public class Personaje : IGameObject, IPhysicGameObject
     //PhysicGameObject
     public void HasCollidedWith(IPhysicGameObject other)
     {
-        _TextureCurrent = _TextureHit;
         Console.WriteLine("Collision %d" + other.ToString());
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
     {
-        return other.IsCollidingWith(_Position, _Radius);
+        return other.IsCollidingWith(_Position, _Radius) || other.IsCollidingWith(_Position, _radarPosition, 10f);
     }
 
     public bool IsCollidingWith(Rectangle other)

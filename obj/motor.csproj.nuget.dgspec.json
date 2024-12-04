@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\danie\\RiderProjects\\MotorRaylib\\motor.csproj": {}
+    "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\motor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\danie\\RiderProjects\\MotorRaylib\\motor.csproj": {
+    "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\motor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\danie\\RiderProjects\\MotorRaylib\\motor.csproj",
+        "projectUniqueName": "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\motor.csproj",
         "projectName": "motor",
-        "projectPath": "C:\\Users\\danie\\RiderProjects\\MotorRaylib\\motor.csproj",
-        "packagesPath": "C:\\Users\\danie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\danie\\RiderProjects\\MotorRaylib\\obj\\",
+        "projectPath": "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\motor.csproj",
+        "packagesPath": "C:\\Users\\ies\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ies\\Downloads\\raylib\\MotorRaylib\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\danie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ies\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -38,7 +42,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         }
       },
       "frameworks": {
@@ -66,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
