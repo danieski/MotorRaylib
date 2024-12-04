@@ -35,7 +35,7 @@ public class ExempleClasses
             int width  = Raylib.GetScreenWidth();
             int height = Raylib.GetScreenHeight();
 
-            for(int i = 0; i < 100; ++i)
+            for(int i = 0; i < 1; ++i)
                 motor.AddGameObject(new Alma(TexturaAlma, width, height));
         }else
         {

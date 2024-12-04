@@ -14,6 +14,8 @@ public class Alma : IGameObject, IPhysicGameObject
     Texture2D _Texture;
     Rectangle _DrawRectangleInfo;
     private LifeBar _currentLifeBar;
+    private Vector2 _RadarPoint;
+    private int contador;
 
     enum LifeBar 
     {
@@ -26,8 +28,8 @@ public class Alma : IGameObject, IPhysicGameObject
 
     public Alma(Texture2D texture, int width, int height)
     {
-        _Position.X = (width/2 - Random.Shared.Next(width)) * 3;
-        _Position.Y = (height/2 - Random.Shared.Next(height)) * 3;
+        _Position.X = 0;
+        _Position.Y = 0;
 
         InitValues(texture);
     }
@@ -55,6 +57,7 @@ public class Alma : IGameObject, IPhysicGameObject
 
         //info de dibuix
         _DrawRectangleInfo = new Rectangle {X = 0, Y = 0, Width = _Texture.Width, Height = _Texture.Height};
+        _RadarPoint = new Vector2(_Position.X, _Position.Y);
     }
 
     public void Start() { }
@@ -98,8 +101,15 @@ public class Alma : IGameObject, IPhysicGameObject
         if (other is Bala)
         {
             _currentLifeBar += 1;
+            Console.WriteLine("Choco desde alma (Bala)");
         }
-        
+
+        if (other is Personaje)
+        {
+            _currentLifeBar += 1;
+            Console.WriteLine("Choco desde alma (Personaje)");
+        }
+        Console.WriteLine("Choco desde alma" + other + contador++);
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
@@ -116,6 +126,7 @@ public class Alma : IGameObject, IPhysicGameObject
     {
         return Raylib.CheckCollisionCircleRec(otherCenter, otherRadius, _Position);
     }
+    
 
     public XmlElement ToXML(XmlDocument document)
     {
@@ -124,5 +135,10 @@ public class Alma : IGameObject, IPhysicGameObject
         node.SetAttribute("y", _Position.Y.ToString());
 
         return node;
+    }
+
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
+    {
+        return Raylib.CheckCollisionPointLine(_RadarPoint, lineStart, lineEnd, 100);
     }
 }

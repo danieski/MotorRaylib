@@ -222,6 +222,7 @@ public class Personaje : IGameObject, IPhysicGameObject
     public void HasCollidedWith(IPhysicGameObject other)
     {
         _TextureCurrent = _TextureHit;
+        Console.WriteLine("Collision %d" + other.ToString());
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
@@ -231,12 +232,16 @@ public class Personaje : IGameObject, IPhysicGameObject
 
     public bool IsCollidingWith(Rectangle other)
     {
-        return Raylib.CheckCollisionCircleRec(_Position, _Radius, other);
+        return Raylib.CheckCollisionPointLine(new Vector2(other.X,other.Y),_Position, _radarPosition,10);
     }
 
     public bool IsCollidingWith(Vector2 otherCenter, float otherRadius)
     {
-        return Raylib.CheckCollisionCircles(_Position, _Radius, otherCenter, otherRadius);
+        return Raylib.CheckCollisionPointLine(otherCenter,_Position, _radarPosition,100);
+    }
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
+    {
+        return false;
     }
     #endregion
 
@@ -249,4 +254,6 @@ public class Personaje : IGameObject, IPhysicGameObject
 
         return node;
     }
+
+ 
 }

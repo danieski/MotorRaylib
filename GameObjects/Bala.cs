@@ -71,4 +71,9 @@ public class Bala : IGameObject, IPhysicGameObject
         _Color = Color.Red;
         motoret.Motoret.Instance.RemoveGameObject(this);
     }
+
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
+    {
+        return false;
+    }
 }
