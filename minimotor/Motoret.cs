@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Collections.ObjectModel;
 using System.Text.Json.Nodes;
 
+
 namespace motoret;
 
 
@@ -27,7 +28,16 @@ public class Motoret
     private List<IGameObject> _GameObjectsToAdd;
     private List<IGameObject> _GameObjectsToRemove;
     private List<IPhysicGameObject> _PhysicGameObjects;
+    bool isPaused = false;
     private int points = 0;
+    enum GameState
+    {
+        Menu,
+        Playing,
+        Pause
+    }
+
+    GameState currentState = GameState.Menu;
 
 
     //Per a simplificar fem una càmera per a tota l'escena
@@ -116,26 +126,73 @@ public class Motoret
 
     //Aquest motoret no funciona si afegiu coses en calent.
     public void Run()
+{
+    while (!Raylib.WindowShouldClose() && !_Stop)
     {
-        while (!Raylib.WindowShouldClose() && !_Stop)
+        if (currentState == GameState.Menu)
         {
+            // Menú de inicio
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.Black);
+
+            // Título
+            Raylib.DrawText("Submarine Sonar", 230, 100, 40, Color.DarkGreen);
+
+            // Botón de Start
+            Rectangle startButton = new Rectangle(Raylib.GetScreenWidth() / 2 - 75, 200, 150, 50);
+            Raylib.DrawRectangleRec(startButton, Color.DarkGray);
+            Raylib.DrawText("Start Game", (int)startButton.X + 10, (int)startButton.Y + 15, 20, Color.White);
+
+            // Detección de clic en el botón
+            if (Raylib.IsMouseButtonPressed(MouseButton.Left) &&
+                Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton))
+            {
+                currentState = GameState.Playing; // Cambiar a estado de juego
+            }
+
+            Raylib.EndDrawing();
+        }
+        else if (currentState == GameState.Pause)
+        {
+            // Pantalla de pausa
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.Black);
+            Raylib.DrawText("Game Paused", Raylib.GetScreenWidth() / 2 - 100, Raylib.GetScreenHeight() / 2 - 20, 20, Color.White);
+            Raylib.DrawText("Press P to Resume", Raylib.GetScreenWidth() / 2 - 110, Raylib.GetScreenHeight() / 2 + 20, 20, Color.Gray);
+
+            // Reanudar el juego
+            if (Raylib.IsKeyPressed(KeyboardKey.P))
+            {
+                currentState = GameState.Playing; // Volver al estado de juego
+            }
+
+            Raylib.EndDrawing();
+        }
+        else if (currentState == GameState.Playing)
+        {
+            // Detectar pausa
+            if (Raylib.IsKeyPressed(KeyboardKey.P))
+            {
+                currentState = GameState.Pause; // Cambiar al estado de pausa
+            }
+
             //Esborrem tots els gameObjects a esborrar
             RemoveGameObjects();
             //Afegim tots els gameObjects creats
             AddGameObjects();
-            
+
             //Update
-            foreach(IGameObject gameObject in _GameObjects)
+            foreach (IGameObject gameObject in _GameObjects)
                 gameObject.Update();
 
             //Game State
- 
+
             //Físiques
-            for(int i = 0; i < _PhysicGameObjects.Count; i++)
+            for (int i = 0; i < _PhysicGameObjects.Count; i++)
             {
-                for(int j=i+1; j < _PhysicGameObjects.Count; j++)
+                for (int j = i + 1; j < _PhysicGameObjects.Count; j++)
                 {
-                    if(_PhysicGameObjects[i].IsCollidingWith(_PhysicGameObjects[j]))
+                    if (_PhysicGameObjects[i].IsCollidingWith(_PhysicGameObjects[j]))
                     {
                         _PhysicGameObjects[i].HasCollidedWith(_PhysicGameObjects[j]);
                         _PhysicGameObjects[j].HasCollidedWith(_PhysicGameObjects[i]);
@@ -145,22 +202,24 @@ public class Motoret
 
             //Render sota càmera
             Raylib.BeginMode2D(_Camera);
-                Raylib.ClearBackground(Color.Black);
+            Raylib.ClearBackground(Color.Black);
 
-                foreach(IGameObject gameObject in _GameObjects)
-                    gameObject.Render();
+            foreach (IGameObject gameObject in _GameObjects)
+                gameObject.Render();
 
             Raylib.EndMode2D();
 
             //Render sota GUI
             Raylib.BeginDrawing();
 
-                foreach(IGameObject gameObject in _GameObjects)
-                    gameObject.RenderGUI();
+            foreach (IGameObject gameObject in _GameObjects)
+                gameObject.RenderGUI();
 
             Raylib.EndDrawing();
         }
     }
+}
+
 
     public void Close()
     {
