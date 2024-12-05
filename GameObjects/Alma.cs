@@ -31,8 +31,8 @@ public class Alma : IGameObject, IPhysicGameObject
 
     public Alma(Texture2D texture, int width, int height)
     {
-        _Position.X = 0;
-        _Position.Y = 0;
+        _Position.X = (width/2 - Random.Shared.Next(width)) * 3;
+        _Position.Y = (height/2 - Random.Shared.Next(height)) * 3;
 
         InitValues(texture);
     }
@@ -69,9 +69,11 @@ public class Alma : IGameObject, IPhysicGameObject
     {
         if (_showAlma)
         {
-            _AlmaTimeCounter =+ 1 * Raylib.GetFrameTime();
+            _AlmaTimeCounter += 5 * Raylib.GetFrameTime();
+            //Console.WriteLine(_AlmaTimeCounter);
             if (_AlmaTimeCounter > _AlmaTimeMaxShow)
             {
+                
                 _AlmaTimeCounter = 0;
                 _showAlma = false;
             }
@@ -99,13 +101,13 @@ public class Alma : IGameObject, IPhysicGameObject
                 break;
             case LifeBar.four:
                 motoret.Motoret.Instance.RemoveGameObject(this);
+                Motoret.Instance.AddPoints();
                 break;
             
         }
         if (_showAlma)
         {
             Raylib.DrawRectangleLinesEx(_Position, 5, _ColorCurrent);
-            _showAlma = false;
         }
 
         
@@ -126,8 +128,9 @@ public class Alma : IGameObject, IPhysicGameObject
         if (other is Personaje)
         {
             _showAlma = true;
+            _AlmaTimeMaxShow = 5;
         }
-        Console.WriteLine("Choco desde alma" + other );
+       // Console.WriteLine("Choco desde alma" + other );
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)

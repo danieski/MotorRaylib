@@ -3,6 +3,7 @@ using Raylib_cs;
 using System.Diagnostics;
 using System.Numerics;
 using System.Collections.ObjectModel;
+using System.Text.Json.Nodes;
 
 namespace motoret;
 
@@ -26,6 +27,8 @@ public class Motoret
     private List<IGameObject> _GameObjectsToAdd;
     private List<IGameObject> _GameObjectsToRemove;
     private List<IPhysicGameObject> _PhysicGameObjects;
+    private int points = 0;
+
 
     //Per a simplificar fem una càmera per a tota l'escena
     private Camera2D _Camera;
@@ -170,5 +173,16 @@ public class Motoret
                 _PhysicGameObjects.Remove(gameObject as IPhysicGameObject);
         }
         Raylib.CloseWindow();
+    }
+
+    public void AddPoints()
+    {
+        points += 10;
+        Console.WriteLine("Points Addes");
+    }
+
+    public int ShowPoints()
+    {
+        return points;
     }
 }

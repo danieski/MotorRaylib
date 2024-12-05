@@ -11,6 +11,7 @@ public class ExitButton : IGameObject
     Color _DrawColor;
     Color _MenuColor = Color.Green;
     Rectangle _MenuRectangle = new Rectangle(new Vector2(320, 30), new Vector2(150, 20));
+    private int points;
     enum GameState
     {
         Menu,
@@ -24,8 +25,8 @@ public class ExitButton : IGameObject
         initState();
         _DrawRectangle = new Rectangle
         {
-            X = Raylib.GetScreenWidth() - 60,
-            Y = 40,
+            X = Raylib.GetScreenWidth() - 50,
+            Y = 30,
             Width = 20,
             Height = 20
         };
@@ -43,7 +44,7 @@ public class ExitButton : IGameObject
             
             _DrawColor = Color.Red;
         }else{
-            _DrawColor = Color.Blue;
+            _DrawColor = Color.DarkGreen;
         }
 
         if (Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), _MenuRectangle))
@@ -54,6 +55,7 @@ public class ExitButton : IGameObject
                 currentState = GameState.Game;
         }
         updateState();
+        points = Motoret.Instance.ShowPoints();
     }
 
     public void Dispose() { }
@@ -101,6 +103,7 @@ public class ExitButton : IGameObject
         }
         
         Raylib.DrawRectangleRec(_DrawRectangle, _DrawColor);
+        Raylib.DrawText($"Points: {points}",12,34,20,Color.DarkGreen);
     }
 
     public XmlElement ToXML(XmlDocument document)
