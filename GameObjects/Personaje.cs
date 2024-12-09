@@ -195,7 +195,7 @@ public class Personaje : IGameObject, IPhysicGameObject
                 if (Raylib.IsKeyPressed(KeyboardKey.Up))
                 {
                     Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90)));   
-                    IGameObject bala = new Bala(_Position + direccion*(_Radius+20), direccion * 30);
+                    IGameObject bala = new Bala(_Position + direccion*(_Radius+20), direccion * 60);
                     Motoret.Instance.AddGameObject(bala);
                     Raylib.PlaySound(shootSound);
                     Console.WriteLine("Reproduciendo sonido shoot");

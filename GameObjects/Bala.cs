@@ -10,6 +10,7 @@ public class Bala : IGameObject, IPhysicGameObject
     private Vector2 _Position;
     private Vector2 _Speed;
     private Color _Color = Color.Green;
+    private float TTL=0.2f;
     
     public Bala(Vector2 position, Vector2 speed)
     {   
@@ -24,7 +25,9 @@ public class Bala : IGameObject, IPhysicGameObject
     public void Update()
     {
         _Position += _Speed * Raylib.GetFrameTime();
-        
+        TTL -= 0.1f * Raylib.GetFrameTime();
+        if (TTL < 0)
+            Motoret.Instance.RemoveGameObject(this);
     }
 
     public void Render()
@@ -69,7 +72,7 @@ public class Bala : IGameObject, IPhysicGameObject
     public void HasCollidedWith(IPhysicGameObject other)
     {
         _Color = Color.Red;
-        motoret.Motoret.Instance.RemoveGameObject(this);
+        Motoret.Instance.RemoveGameObject(this);
     }
 
     public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
