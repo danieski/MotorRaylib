@@ -30,6 +30,8 @@ public class Personaje : IGameObject, IPhysicGameObject
     private float _tiempoReinicio = 6f; // Tiempo en segundos para reiniciar
     private float _tiempoTranscurrido = 0f; 
     private Music music;
+    List<IGameObject> poolBalas = new List<IGameObject>();
+    
     enum CharacterStates
     {
         Idel,
@@ -76,9 +78,13 @@ public class Personaje : IGameObject, IPhysicGameObject
         _DrawRectangleInfo      = new Rectangle {X = 0, Y = 0, Width = _TextureNoHit.Width, Height = _TextureNoHit.Height};
         _DrawRectangleCurrent   = new Rectangle {X = _Position.X, Y = _Position.Y, Height = 100, Width = 100};
         _DrawOffset = new Vector2 {X = 50, Y = 50};
-        
-        //_recorridoDebug = new List<Vector2>();
         ChangeState(CharacterStates.Idel);
+        //Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90))); 
+        
+        
+        IGameObject bala = new Bala(_Position, Vector2.Zero);
+        poolBalas.Add(bala);
+        Motoret.Instance.AddGameObject(poolBalas);
     }
 
     public void Start() { }
@@ -88,13 +94,9 @@ public class Personaje : IGameObject, IPhysicGameObject
         Raylib.UpdateMusicStream(music);
         float deltaTime = Raylib.GetFrameTime();
 
-        //Movement
-        //Float ( Angulo y velocidad ) Coredenadas polares
-        //Vidas de meteoritos
         if (currentState == CharacterStates.Death && !_deathSoundPlayed) 
         {
             Raylib.PlaySound(deathSound);
-            Console.WriteLine("Reproduciendo sonido");
             _deathSoundPlayed = true; 
             
         }
@@ -104,13 +106,10 @@ public class Personaje : IGameObject, IPhysicGameObject
         
         if (Raylib.IsKeyDown(KeyboardKey.W)&& currentState != CharacterStates.Death)
         {
-           // _direction.Y += _rotation*deltaTime;
            _Position.Y += _Speed * (float)Math.Sin((Math.PI/180)*(_rotation-90))*deltaTime;
            _Position.X += _Speed * (float)Math.Cos((Math.PI/180)*(_rotation-90))*deltaTime;
 
         }
-        //como lo hago sin cambiar el sprite
-        //me refiero al angulo erroneo que tiene ahora mismo
         
         if(Raylib.IsKeyDown(KeyboardKey.D)&& currentState != CharacterStates.Death)
             _rotation += 30 * deltaTime;
@@ -152,8 +151,8 @@ public class Personaje : IGameObject, IPhysicGameObject
         Raylib.UnloadTexture(_TextureHit);
         Raylib.UnloadTexture(_TextureNoHit);
         Raylib.UnloadSound(deathSound); 
-        Raylib.UnloadSound(shootSound);// Descargar el sonido
-        Raylib.UnloadMusicStream(music);// Descargar el sonido
+        Raylib.UnloadSound(shootSound);
+        Raylib.UnloadMusicStream(music);
         Raylib.CloseAudioDevice();
     }
     
@@ -196,9 +195,10 @@ public class Personaje : IGameObject, IPhysicGameObject
                 {
                     Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90)));   
                     IGameObject bala = new Bala(_Position + direccion*(_Radius+20), direccion * 60);
+                    
                     Motoret.Instance.AddGameObject(bala);
                     Raylib.PlaySound(shootSound);
-                    Console.WriteLine("Reproduciendo sonido shoot");
+                    //((Bala)poolBalas[0]).activateBala(_Position + direccion * (_Radius+20),direccion * 60);//Check HERE <---
                 }
                 break;
             

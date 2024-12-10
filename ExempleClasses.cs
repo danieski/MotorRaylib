@@ -1,3 +1,4 @@
+using System.Numerics;
 using motoret;
 using Raylib_cs;
 
@@ -28,7 +29,6 @@ public class ExempleClasses
             IGameObject player = new Personaje();
             
             motor.AddGameObject(player);
-
             //aquest s'encarregarà de la gestió del botó de sortida del joc
             motor.AddGameObject(new ExitButton());
 

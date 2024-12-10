@@ -28,8 +28,7 @@ public class Motoret
     private List<IGameObject> _GameObjectsToAdd;
     private List<IGameObject> _GameObjectsToRemove;
     private List<IPhysicGameObject> _PhysicGameObjects;
-    bool isPaused = false;
-    private int points = 0;
+    private int _points;
     enum GameState
     {
         Menu,
@@ -236,12 +235,12 @@ public class Motoret
 
     public void AddPoints()
     {
-        points += 10;
-        Console.WriteLine("Points Addes");
+        _points += 10;
+        Console.WriteLine("Points Added");
     }
 
     public int ShowPoints()
     {
-        return points;
+        return _points;
     }
 }
