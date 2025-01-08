@@ -19,10 +19,10 @@ De manera similar, aplicamos el mismo principio para determinar la dirección de
 - [X] Singleton
 - [X] State Machine
 - [X] Visitor
-- [] Factory
-- [] Observer
-- [] Object Component
-- 
+- [ ] Factory
+- [ ] Observer
+- [ ] Object Component
+  
 **Instrucciones:**
 
 La barra de radar aparecerá y revelará los obstáculos en tu camino. Selecciona la mejor ruta para evitarlos y destrúyelos para ganar puntos.
@@ -30,9 +30,13 @@ La barra de radar aparecerá y revelará los obstáculos en tu camino. Seleccion
 **Controles:**
 
 A, D → Rotar
+
 W → Avanzar
+
 P → Pausar
+
 Flecha Arriba → Disparar
+
 T → Turbo (Aumentar velocidad, no permite disparar)
 
 **Cambios Fututos:**
@@ -72,7 +76,7 @@ Similarly, we apply the same principle to determine the submarine's shooting dir
 - [ ] Factory
 - [ ] Observer
 - [ ] Object Component
-- [ ] 
+
 **Instructions:**
 
 The radar bar will appear and reveal obstacles in your path. Select the best route to avoid them and destroy them to gain points.
@@ -80,9 +84,13 @@ The radar bar will appear and reveal obstacles in your path. Select the best rou
 **Controls:**
 
 A, D → Rotate
+
 W → Move Forward
+
 P → Pause
+
 Up Arrow → Shoot
+
 T → Turbo (Increase speed, disallows shooting)
 
 **Future Changes:**
