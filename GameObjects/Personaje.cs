@@ -3,6 +3,7 @@ using System.Xml;
 using motoret;
 using Raylib_cs;
 
+
 namespace exempleClasses;
 
 public class Personaje : IGameObject, IPhysicGameObject
@@ -19,20 +20,23 @@ public class Personaje : IGameObject, IPhysicGameObject
     float _SpeedTurbo = 5;
     Color _Color;
     private float _rotation;
-    Vector2 _direction;
-    private Vector2 _direccion1;
     private float _radarAngle = 0f;
     private float _radarRadius = 300f;
     private float _radarSpeed = 1f;
-    private int _radarStickX;
-    private int _radarStickY;
     private Vector2 _radarPosition;
+    private Sound deathSound;
+    private Sound shootSound;
+    private bool _deathSoundPlayed = false; 
+    private float _tiempoReinicio = 6f; // Tiempo en segundos para reiniciar
+    private float _tiempoTranscurrido = 0f; 
+    private Music music;
+    List<IGameObject> poolBalas = new List<IGameObject>();
     
-
     enum CharacterStates
     {
         Idel,
-        Turbo
+        Turbo,
+        Death
     }
     CharacterStates currentState;
     private bool _turboActivated = false;
@@ -55,9 +59,15 @@ public class Personaje : IGameObject, IPhysicGameObject
 
     private void InitValues()
     {
-        _Radius   = 50;
-        
-        
+    
+    
+        _Radius   = 25;
+        //Audio
+        Raylib.InitAudioDevice(); 
+        deathSound = Raylib.LoadSound("assets/death.wav");
+        shootSound = Raylib.LoadSound("assets/shoot.wav");
+        music = Raylib.LoadMusicStream("assets/Sonar.wav");
+        Raylib.PlayMusicStream(music);
 
         //textures
         _TextureNoHit   = Raylib.LoadTexture("assets/ship.png");
@@ -68,37 +78,42 @@ public class Personaje : IGameObject, IPhysicGameObject
         _DrawRectangleInfo      = new Rectangle {X = 0, Y = 0, Width = _TextureNoHit.Width, Height = _TextureNoHit.Height};
         _DrawRectangleCurrent   = new Rectangle {X = _Position.X, Y = _Position.Y, Height = 100, Width = 100};
         _DrawOffset = new Vector2 {X = 50, Y = 50};
-        
-        //_recorridoDebug = new List<Vector2>();
         ChangeState(CharacterStates.Idel);
+        //Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90))); 
+        
+        
+        IGameObject bala = new Bala(_Position, Vector2.Zero);
+        poolBalas.Add(bala);
+        Motoret.Instance.AddGameObject(poolBalas);
     }
 
     public void Start() { }
 
     public void Update()
     {
+        Raylib.UpdateMusicStream(music);
         float deltaTime = Raylib.GetFrameTime();
 
-        //Movement
-        //Float ( Angulo y velocidad ) Coredenadas polares
-        //Vidas de meteoritos
+        if (currentState == CharacterStates.Death && !_deathSoundPlayed) 
+        {
+            Raylib.PlaySound(deathSound);
+            _deathSoundPlayed = true; 
+            
+        }
         
-        if(Raylib.IsKeyDown(KeyboardKey.S))
+        if(Raylib.IsKeyDown(KeyboardKey.S) && currentState != CharacterStates.Death)
             _Position.Y += _Speed*deltaTime;
         
-        if (Raylib.IsKeyDown(KeyboardKey.W))
+        if (Raylib.IsKeyDown(KeyboardKey.W)&& currentState != CharacterStates.Death)
         {
-           // _direction.Y += _rotation*deltaTime;
            _Position.Y += _Speed * (float)Math.Sin((Math.PI/180)*(_rotation-90))*deltaTime;
            _Position.X += _Speed * (float)Math.Cos((Math.PI/180)*(_rotation-90))*deltaTime;
 
         }
-        //como lo hago sin cambiar el sprite
-        //me refiero al angulo erroneo que tiene ahora mismo
         
-        if(Raylib.IsKeyDown(KeyboardKey.D))
+        if(Raylib.IsKeyDown(KeyboardKey.D)&& currentState != CharacterStates.Death)
             _rotation += 30 * deltaTime;
-        if(Raylib.IsKeyDown(KeyboardKey.A))
+        if(Raylib.IsKeyDown(KeyboardKey.A)&& currentState != CharacterStates.Death)
             _rotation -= 30 * deltaTime;
         
         if (Raylib.IsKeyPressed(KeyboardKey.T))
@@ -118,8 +133,16 @@ public class Personaje : IGameObject, IPhysicGameObject
         {
             _radarAngle -= MathF.PI *2;
         }
-  
-        
+
+        if (_deathSoundPlayed) // Si el personaje ha muerto
+        {
+            _tiempoTranscurrido += Raylib.GetFrameTime(); // Actualizar el contador
+
+            if (_tiempoTranscurrido >= _tiempoReinicio)
+            {
+                Motoret.Instance.Stop();
+            }
+        }
     }
 
 
@@ -127,6 +150,10 @@ public class Personaje : IGameObject, IPhysicGameObject
     {
         Raylib.UnloadTexture(_TextureHit);
         Raylib.UnloadTexture(_TextureNoHit);
+        Raylib.UnloadSound(deathSound); 
+        Raylib.UnloadSound(shootSound);
+        Raylib.UnloadMusicStream(music);
+        Raylib.CloseAudioDevice();
     }
     
     #region StateMachine
@@ -134,7 +161,9 @@ public class Personaje : IGameObject, IPhysicGameObject
     private void ChangeState(CharacterStates newState)
     {
         ExitState();
+
         InitState(newState);
+        
     }
 
     private void InitState(CharacterStates newState)
@@ -150,6 +179,9 @@ public class Personaje : IGameObject, IPhysicGameObject
                 _Color = Color.Red;
                 _Speed    = 100f * _SpeedTurbo;
                 break;
+            case CharacterStates.Death:
+                
+                break;
         }
     }
 
@@ -162,8 +194,11 @@ public class Personaje : IGameObject, IPhysicGameObject
                 if (Raylib.IsKeyPressed(KeyboardKey.Up))
                 {
                     Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90)));   
-                    IGameObject bala = new Bala(_Position + direccion*(_Radius+20), direccion * 30);
+                    IGameObject bala = new Bala(_Position + direccion*(_Radius+20), direccion * 60);
+                    
                     Motoret.Instance.AddGameObject(bala);
+                    Raylib.PlaySound(shootSound);
+                    //((Bala)poolBalas[0]).activateBala(_Position + direccion * (_Radius+20),direccion * 60);//Check HERE <---
                 }
                 break;
             
@@ -171,6 +206,10 @@ public class Personaje : IGameObject, IPhysicGameObject
                 if( !Raylib.IsKeyDown(KeyboardKey.W) && !Raylib.IsKeyDown(KeyboardKey.S) &&
                     !Raylib.IsKeyDown(KeyboardKey.A) && !Raylib.IsKeyDown(KeyboardKey.D))
                     ChangeState(CharacterStates.Idel);
+                break;
+            
+            case CharacterStates.Death:
+                
                 break;
         }
     }
@@ -221,22 +260,32 @@ public class Personaje : IGameObject, IPhysicGameObject
     //PhysicGameObject
     public void HasCollidedWith(IPhysicGameObject other)
     {
-        _TextureCurrent = _TextureHit;
+        //Console.WriteLine("Collision %d" + other.ToString());
+        if (other.IsCollidingWith(_Position, _Radius))
+        {
+            //Console.WriteLine("Collision with my Circle");
+            //Motoret.Instance.Stop();
+            ChangeState(CharacterStates.Death);
+        }
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
     {
-        return other.IsCollidingWith(_Position, _Radius);
+        return other.IsCollidingWith(_Position, _Radius) || other.IsCollidingWith(_Position, _radarPosition, 10f);
     }
 
     public bool IsCollidingWith(Rectangle other)
     {
-        return Raylib.CheckCollisionCircleRec(_Position, _Radius, other);
+        return Raylib.CheckCollisionPointLine(new Vector2(other.X,other.Y),_Position, _radarPosition,10);
     }
 
     public bool IsCollidingWith(Vector2 otherCenter, float otherRadius)
     {
-        return Raylib.CheckCollisionCircles(_Position, _Radius, otherCenter, otherRadius);
+        return Raylib.CheckCollisionPointLine(otherCenter,_Position, _radarPosition,100);
+    }
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
+    {
+        return false;
     }
     #endregion
 
@@ -249,4 +298,6 @@ public class Personaje : IGameObject, IPhysicGameObject
 
         return node;
     }
+
+ 
 }

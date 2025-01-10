@@ -14,6 +14,11 @@ public class Alma : IGameObject, IPhysicGameObject
     Texture2D _Texture;
     Rectangle _DrawRectangleInfo;
     private LifeBar _currentLifeBar;
+    private Vector2 _RadarPoint;
+    private bool _showAlma = false;
+    
+    private float _AlmaTimeMaxShow = 5;
+    private float _AlmaTimeCounter = 0;
 
     enum LifeBar 
     {
@@ -44,8 +49,8 @@ public class Alma : IGameObject, IPhysicGameObject
 
     private void InitValues(Texture2D texture)
     {
-        _Position.Height = 100;
-        _Position.Width = 100;
+        _Position.Height = 10;
+        _Position.Width = 10;
 
         _Texture = texture;
 
@@ -55,13 +60,25 @@ public class Alma : IGameObject, IPhysicGameObject
 
         //info de dibuix
         _DrawRectangleInfo = new Rectangle {X = 0, Y = 0, Width = _Texture.Width, Height = _Texture.Height};
+        _RadarPoint = new Vector2(_Position.X, _Position.Y);
     }
 
     public void Start() { }
 
     public void Update()
-    { 
-        //_ColorCurrent = _ColorNoHit;
+    {
+        if (_showAlma)
+        {
+            _AlmaTimeCounter += 5 * Raylib.GetFrameTime();
+            //Console.WriteLine(_AlmaTimeCounter);
+            if (_AlmaTimeCounter > _AlmaTimeMaxShow)
+            {
+                
+                _AlmaTimeCounter = 0;
+                _showAlma = false;
+            }
+            
+        }
     }
 
     //Al ser textura compartida, no l'alliberem
@@ -69,7 +86,7 @@ public class Alma : IGameObject, IPhysicGameObject
 
     public void Render()
     {
-        Raylib.DrawTexturePro(_Texture, _DrawRectangleInfo, _Position, Vector2.Zero, 0, _ColorCurrent);
+   
         switch (_currentLifeBar)
         {
             case LifeBar.zero:
@@ -84,9 +101,16 @@ public class Alma : IGameObject, IPhysicGameObject
                 break;
             case LifeBar.four:
                 motoret.Motoret.Instance.RemoveGameObject(this);
+                Motoret.Instance.AddPoints();
                 break;
+            
         }
-        Raylib.DrawRectangleLinesEx(_Position, 5, _ColorCurrent);
+        if (_showAlma)
+        {
+            Raylib.DrawRectangleLinesEx(_Position, 5, _ColorCurrent);
+        }
+
+        
     }
 
     public void RenderGUI() { }
@@ -98,8 +122,15 @@ public class Alma : IGameObject, IPhysicGameObject
         if (other is Bala)
         {
             _currentLifeBar += 1;
+            Console.WriteLine("Choco desde alma (Bala)");
         }
-        
+
+        if (other is Personaje)
+        {
+            _showAlma = true;
+            _AlmaTimeMaxShow = 5;
+        }
+       // Console.WriteLine("Choco desde alma" + other );
     }
 
     public bool IsCollidingWith(IPhysicGameObject other)
@@ -116,6 +147,7 @@ public class Alma : IGameObject, IPhysicGameObject
     {
         return Raylib.CheckCollisionCircleRec(otherCenter, otherRadius, _Position);
     }
+    
 
     public XmlElement ToXML(XmlDocument document)
     {
@@ -124,5 +156,10 @@ public class Alma : IGameObject, IPhysicGameObject
         node.SetAttribute("y", _Position.Y.ToString());
 
         return node;
+    }
+
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness)
+    {
+        return Raylib.CheckCollisionPointLine(_Position.Position, lineStart, lineEnd, 10);
     }
 }

@@ -2,6 +2,7 @@
 using exempleClasses;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Raylib_cs;
 
 namespace motoret;
 class Program

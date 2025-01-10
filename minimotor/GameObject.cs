@@ -19,5 +19,8 @@ public interface IPhysicGameObject
     public bool IsCollidingWith(IPhysicGameObject other);
     public bool IsCollidingWith(Rectangle other);
     public bool IsCollidingWith(Vector2 otherCenter, float otherRadius);
+ 
     public void HasCollidedWith(IPhysicGameObject other);
+    public bool IsCollidingWith(Vector2 lineStart, Vector2 lineEnd, float lineThickness);
 }
+
