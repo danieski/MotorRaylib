@@ -10,14 +10,13 @@ public class Bala : IGameObject, IPhysicGameObject
     private Vector2 _Position;
     private Vector2 _Speed;
     private Color _Color = Color.Green;
-    private float TTL=3000f;
+    private float TTL=3f;
     private bool _balaIsActive = true;
     
     public Bala(Vector2 position, Vector2 speed)
     {   
         _Position = position;
         _Speed = speed;
-        Console.WriteLine("Bala created");
     }
 
     public void Start()
@@ -26,13 +25,16 @@ public class Bala : IGameObject, IPhysicGameObject
 
     public void Update()
     {
-        //Console.WriteLine("La bala esta activdad: " +  _balaIsActive);
+
         _Position += _Speed * Raylib.GetFrameTime();
-        TTL -= 0.1f * Raylib.GetFrameTime();
-        if (TTL < 0)
-            Motoret.Instance.RemoveGameObject(this);
-       // Console.WriteLine("Posicion de la bala: " +  _Position);
+        if (_balaIsActive)
+            TTL -= 0.5f * Raylib.GetFrameTime();
         
+        if (TTL < 0) 
+        {
+                _balaIsActive = false;
+                TTL = 2;
+        }
     }
 
     public void Render()

@@ -82,8 +82,8 @@ public class Personaje : IGameObject, IPhysicGameObject
         //Vector2 direccion = new Vector2((float)Math.Cos((Math.PI/180)*(_rotation-90)), (float)Math.Sin((Math.PI/180)*(_rotation-90))); 
         
         
-        IGameObject bala = new Bala(_Position, Vector2.Zero);
-        poolBalas.Add(bala);
+        //IGameObject bala = new Bala(_Position, Vector2.Zero);
+        //poolBalas.Add(bala);
         Motoret.Instance.AddGameObject(poolBalas);
     }
 
