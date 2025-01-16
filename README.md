@@ -5,13 +5,9 @@ El objetivo principal de este proyecto es entender los componentes fundamentales
 
 Con este código, logramos agregar nuevos objetos al bucle principal, definir interfaces que establecen las propiedades de los objetos, como IGameObject e IPhysicGameObject, y gestionar las colisiones. Estas colisiones se verifican mediante un bucle que recorre todos los objetos del juego y, utilizando el patrón Visitor, se comprueba si algún objeto está colisionando con otro en la lista.
 
-**Trigonometría**
+Usando las funciones Math().cos() y Math.sen() se realiza la logica de impacto del radar con lo que calculara en que momento impacta con un objetivo para este ser renderizado por el programa, use esta misma logica para 
+dirigir los disparos de mi submarino.
 
-Se ha implementado una línea de radar para detectar obstáculos, representada como una línea única. El punto de inicio de esta línea es el personaje principal y el punto final se encuentra a 100 píxeles de distancia de él. La línea rota en función de un ángulo dado.
-
-Para calcular la posición del punto final, utilizamos funciones trigonométricas: coseno y seno. Estas funciones representan las componentes x y y de la dirección de la línea. Específicamente, calculamos las coordenadas x e y multiplicando el coseno y el seno del ángulo del radar (_radarAngle) por la distancia (100 píxeles). Los valores resultantes de x y y nos dan la posición final del punto de la línea del radar.
-
-De manera similar, aplicamos el mismo principio para determinar la dirección del disparo del submarino. A medida que el usuario da comandos de control, la dirección de disparo del submarino rota en consecuencia, y ajustamos el ángulo del disparo utilizando las funciones de coseno y seno de la misma forma.
 
 **Patrones de Programación Utilizados:**
 
